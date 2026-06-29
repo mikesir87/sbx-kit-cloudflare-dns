@@ -1,0 +1,21 @@
+schemaVersion: "1"
+kind: mixin
+name: cloudflare-dns
+displayName: Cloudflare DNS
+description: A mixin for managing Cloudflare DNS records.
+
+network:
+  allowedDomains:
+    - api.cloudflare.com
+  serviceDomains:
+    api.cloudflare.com: cloudflare-api
+  serviceAuth:
+    cloudflare-api:
+      headerName: Authorization
+      valueFormat: "Bearer %s"
+
+credentials:
+  sources:
+    cloudflare-api:
+      env:
+        - CLOUDFLARE_API_TOKEN
