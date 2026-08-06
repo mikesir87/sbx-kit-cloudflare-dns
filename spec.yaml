@@ -1,21 +1,25 @@
-schemaVersion: "1"
+schemaVersion: "2"
 kind: mixin
 name: cloudflare-dns
 displayName: Cloudflare DNS
 description: A mixin for managing Cloudflare DNS records.
+sourceURL: https://github.com/mikesir87/sbx-kit-cloudflare-dns
+licenses:
+  - Apache-2.0
 
-network:
-  allowedDomains:
-    - api.cloudflare.com
-  serviceDomains:
-    api.cloudflare.com: cloudflare-api
-  serviceAuth:
-    cloudflare-api:
-      headerName: Authorization
-      valueFormat: "Bearer %s"
+requires:
+  agent: claude
+
+permissions:
+  network:
+    allow:
+      - api.cloudflare.com
 
 credentials:
-  sources:
-    cloudflare-api:
-      env:
-        - CLOUDFLARE_API_TOKEN
+  - service: cloudflare-api
+    description: Cloudflare API token with DNS read/edit permissions
+    apiKey:
+      name: CLOUDFLARE_API_TOKEN
+      inject:
+        - domain: api.cloudflare.com
+          scheme: bearer

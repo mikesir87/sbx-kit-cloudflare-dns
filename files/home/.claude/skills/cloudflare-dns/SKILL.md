@@ -1,5 +1,5 @@
 ---
-name: dns-management
+name: cloudflare-dns
 description: A set of instructions for managing DNS records for the user
 ---
 

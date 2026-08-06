@@ -28,6 +28,17 @@ Can you have all requests for *.home.example.com go to my home lab?
 
     When prompted, enter the token you obtained.
 
+    Alternatively, if you already keep the token in a host environment variable or file, bind it in your own `~/.config/sbx/credentials.yaml` instead:
+
+    ```yaml
+    bindings:
+      cloudflare-api:
+        discovery:
+          - env: [CLOUDFLARE_API_TOKEN]
+        allowedDomains:
+          - api.cloudflare.com
+    ```
+
 3. Start a sandbox using this kit:
 
     ```bash
