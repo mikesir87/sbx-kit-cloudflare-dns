@@ -1,25 +1,35 @@
-schemaVersion: "2"
+# syntax=docker/sandbox-kit:3
+schemaVersion: "3"
 kind: mixin
-name: cloudflare-dns
 displayName: Cloudflare DNS
 description: A mixin for managing Cloudflare DNS records.
-sourceURL: https://github.com/mikesir87/sbx-kit-cloudflare-dns
+sourceUrl: https://github.com/mikesir87/sbx-kit-cloudflare-dns
 licenses:
   - Apache-2.0
 
-requires:
-  agent: claude
+args:
+  hostnames:
+    description: A comma-separated list of hostnames to manage in Cloudflare DNS. Can include wildcards (e.g., *.example.com).
+    required: true
 
-permissions:
-  network:
-    allow:
-      - api.cloudflare.com
+capabilities:
+  - type: com.docker.sandbox/network-policy@1
+    config:
+      runtime:
+        allow:
+          - api.cloudflare.com
 
-credentials:
-  - service: cloudflare-api
+  - type: com.docker.sandbox/credential@1
     description: Cloudflare API token with DNS read/edit permissions
-    apiKey:
-      name: CLOUDFLARE_API_TOKEN
-      inject:
-        - domain: api.cloudflare.com
-          scheme: bearer
+    config:
+      service: cloudflare-api
+      phase: runtime
+      apiKey:
+        name: CLOUDFLARE_API_TOKEN
+        proxyManaged: true
+        inject:
+          - {domain: api.cloudflare.com, header: Authorization, format: "Bearer %s"}
+
+  - type: com.docker.sandbox/agent-skill@1
+    config:
+      path: /usr/share/cloudflare-dns-skill/cloudflare-dns
